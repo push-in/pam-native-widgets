@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1);$roots=['Pam\\Native\\Widgets\\'=>dirname(__DIR__).'/src/','Pam\\Native\\'=>dirname(__DIR__,2).'/../pam-native/packages/native/src/'];spl_autoload_register(static function(string$c)use($roots){foreach($roots as$p=>$r)if(str_starts_with($c,$p)){$f=$r.str_replace('\\','/',substr($c,strlen($p))).'.php';if(is_file($f))require$f;return;}});use Pam\Native\Widgets\WidgetContent;try{new WidgetContent(str_repeat('x',129));echo"FAIL bounds\n";exit(1);}catch(InvalidArgumentException){}echo"PASS widget content is bounded\n1 tests, 0 failures\n";

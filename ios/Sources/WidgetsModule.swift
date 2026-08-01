@@ -1,0 +1,4 @@
+import Foundation
+import PamNative
+import WidgetKit
+public final class WidgetsModule:NativeModule,@unchecked Sendable{public init(){};public func invoke(method:String,payload:Data,completion:@escaping ModuleCompletion){guard method=="update"else{completion(.failure,Data("Unknown method".utf8));return};do{let v=try WireMap.decode(payload);let group="group.\(Bundle.main.bundleIdentifier ?? "").pam-native";guard let defaults=UserDefaults(suiteName:group)else{throw WidgetError.group};for key in["title","subtitle","value","deepLink"]{defaults.set(try v.text(key),forKey:"pam.widget.\(key)")};WidgetCenter.shared.reloadAllTimelines();completion(.success,try WireMap.encode([:]))}catch{completion(.failure,Data(String(describing:error).utf8))}}};private enum WidgetError:Error{case group};private extension Dictionary where Key==String,Value==WireValue{func text(_ k:String)throws->String{guard case let.text(v)?=self[k]else{throw WidgetError.group};return v}}
